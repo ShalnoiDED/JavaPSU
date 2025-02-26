@@ -4,36 +4,21 @@
  */
 package javalabs;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Максим
  */
-public class mainForm extends javax.swing.JFrame {
+public class MainForm extends javax.swing.JFrame {
+    
+    private ArrayList<RecIntegral> collection = new ArrayList<>();
 
     /**
      * Creates new form mainForm
      */
-    public mainForm() {
+    public MainForm() {
         initComponents();
-    }
-    
-     public static double Calculate(double x) {
-        return 1/x;
-    }
-    
-     public static double Result(double a, double b, double h) {
-        int n = (int) ((b - a) / h);
-        double sum = 0.5 * (Calculate(a) + Calculate(b));
-        
-        for (int i = 1; i < n; i++) {
-            double x = a + i * h;
-            sum += Calculate(x);
-        }
-        
-        double lastSegment = (b - (a + n * h));
-        sum += lastSegment > 0 ? 0.5 * (Calculate(a + n * h) + Calculate(b)) * lastSegment / h : 0;
-        
-        return sum * h;
     }
 
     /**
@@ -57,6 +42,8 @@ public class mainForm extends javax.swing.JFrame {
         lowerBorderLabel = new javax.swing.JLabel();
         upperBorderLabel = new javax.swing.JLabel();
         stepLabel = new javax.swing.JLabel();
+        cleanButton = new javax.swing.JButton();
+        fillButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Вычисление определенного интегралла - 1/x");
@@ -71,18 +58,21 @@ public class mainForm extends javax.swing.JFrame {
             new String [] {
                 "Нижняя граница", "Верхняя граница", "Шаг", "Результат"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(infoTable);
-        if (infoTable.getColumnModel().getColumnCount() > 0) {
-            infoTable.getColumnModel().getColumn(0).setHeaderValue("Нижняя граница");
-            infoTable.getColumnModel().getColumn(1).setHeaderValue("Верхняя граница");
-            infoTable.getColumnModel().getColumn(2).setHeaderValue("Шаг");
-            infoTable.getColumnModel().getColumn(3).setHeaderValue("Результат");
-        }
         infoTable.getAccessibleContext().setAccessibleDescription("");
 
         addEntryButton.setBackground(new java.awt.Color(161, 62, 151));
         addEntryButton.setText("Добавить");
+        addEntryButton.setToolTipText("Добавить данные в таблицу");
         addEntryButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 addEntryButtonMouseClicked(evt);
@@ -91,6 +81,7 @@ public class mainForm extends javax.swing.JFrame {
 
         deleteEntryButton.setBackground(new java.awt.Color(161, 62, 151));
         deleteEntryButton.setText("Удалить");
+        deleteEntryButton.setToolTipText("Удалить выбранную строку");
         deleteEntryButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 deleteEntryButtonMouseClicked(evt);
@@ -99,6 +90,7 @@ public class mainForm extends javax.swing.JFrame {
 
         getResultButton.setBackground(new java.awt.Color(161, 62, 151));
         getResultButton.setText("Вычислить");
+        getResultButton.setToolTipText("Вычислить выбранную строку");
         getResultButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 getResultButtonMouseClicked(evt);
@@ -120,6 +112,24 @@ public class mainForm extends javax.swing.JFrame {
         stepLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         stepLabel.setText("Шаг");
 
+        cleanButton.setBackground(new java.awt.Color(161, 62, 151));
+        cleanButton.setText("Очистить");
+        cleanButton.setToolTipText("Очистить таблицу");
+        cleanButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cleanButtonMouseClicked(evt);
+            }
+        });
+
+        fillButton.setBackground(new java.awt.Color(161, 62, 151));
+        fillButton.setText("Заполнить");
+        fillButton.setToolTipText("Заполнить таблицу данными");
+        fillButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fillButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -127,22 +137,26 @@ public class mainForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(upperBorderLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lowerBorderLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(stepLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lowerBorderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(upperBorderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(stepTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(upperBorderLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lowerBorderLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(stepLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lowerBorderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(upperBorderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(stepTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cleanButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(getResultButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(deleteEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addEntryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
+                            .addComponent(addEntryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(getResultButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fillButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(30, 30, 30))
         );
         jPanel1Layout.setVerticalGroup(
@@ -165,7 +179,11 @@ public class mainForm extends javax.swing.JFrame {
                     .addComponent(stepLabel))
                 .addGap(30, 30, 30)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fillButton)
+                    .addComponent(cleanButton))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -176,7 +194,7 @@ public class mainForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -190,18 +208,26 @@ public class mainForm extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)infoTable.getModel();
         
         String temp = lowerBorderTextField.getText();
-        if (temp.isEmpty())
-            return;
+        if (temp.isEmpty()) return;
         double low = Double.parseDouble(temp);
+        
         temp = upperBorderTextField.getText();
-        if (temp.isEmpty())
-            return;
+        if (temp.isEmpty()) return;
         double high = Double.parseDouble(temp);
+        
         temp = stepTextField.getText();
         if (temp.isEmpty()) return;
-        double shift = Double.parseDouble(temp);
+        double step = Double.parseDouble(temp);
         
-        model.addRow(new Object[] {low, high, shift, 0});
+        RecIntegral info;
+        try {
+            info = new RecIntegral(low, high, step);
+        } catch (RangeException exception) {
+            return;
+        }
+        
+        model.addRow(new Object[] {low, high, step, 0});
+        collection.add(info);
     }//GEN-LAST:event_addEntryButtonMouseClicked
 
     private void deleteEntryButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteEntryButtonMouseClicked
@@ -212,26 +238,44 @@ public class mainForm extends javax.swing.JFrame {
         if (index == -1) return;
         
         model.removeRow(index);
+        
+        collection.remove(index);
     }//GEN-LAST:event_deleteEntryButtonMouseClicked
 
     private void getResultButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getResultButtonMouseClicked
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)infoTable.getModel();
         
-        int count = model.getRowCount();
+        int index = infoTable.getSelectedRow();
+
+        if (index == -1) return;
         
-        for (int i = 0; i < count; i++) {
-            String lowObj = model.getValueAt(i, 0).toString();
-            String highObj = model.getValueAt(i, 1).toString();
-            String shiftObj = model.getValueAt(i, 2).toString();
-            
-            double resNum = Result(Double.parseDouble(lowObj),
-                    Double.parseDouble(highObj),
-                    Double.parseDouble(shiftObj));
-            
-            Object resObj = resNum;
-            model.setValueAt(resObj, i, 3);
-        }
+        RecIntegral integral = collection.get(index);
+
+        double resNum = integral.Result();
+
+        Object resObj = resNum;
+        model.setValueAt(resObj, index, 3);
     }//GEN-LAST:event_getResultButtonMouseClicked
+
+    private void cleanButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cleanButtonMouseClicked
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)infoTable.getModel();
+        model.setRowCount(0);
+    }//GEN-LAST:event_cleanButtonMouseClicked
+
+    private void fillButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fillButtonMouseClicked
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)infoTable.getModel();
+        
+        int count = collection.size();
+        if (count == 0) return;
+        
+        model.setRowCount(0);
+
+        for (int i = 0; i < count; i++) {
+            RecIntegral integral = collection.get(i);
+            double[] integralFields = integral.GetResultFields();
+            model.addRow(new Object[] {integralFields[1], integralFields[2], integralFields[3], integralFields[0]});
+        }
+    }//GEN-LAST:event_fillButtonMouseClicked
 
     
     
@@ -252,27 +296,30 @@ public class mainForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(mainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(mainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(mainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(mainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mainForm().setVisible(true);
+                new MainForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEntryButton;
+    private javax.swing.JButton cleanButton;
     private javax.swing.JButton deleteEntryButton;
+    private javax.swing.JButton fillButton;
     private javax.swing.JButton getResultButton;
     private javax.swing.JTable infoTable;
     private javax.swing.JPanel jPanel1;

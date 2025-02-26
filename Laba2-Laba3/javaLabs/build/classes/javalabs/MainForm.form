@@ -32,7 +32,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -47,29 +47,35 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="upperBorderLabel" alignment="0" max="32767" attributes="0"/>
-                              <Component id="lowerBorderLabel" alignment="0" max="32767" attributes="0"/>
-                              <Component id="stepLabel" min="-2" pref="98" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" pref="500" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lowerBorderTextField" min="-2" pref="71" max="-2" attributes="0"/>
-                              <Component id="upperBorderTextField" min="-2" pref="71" max="-2" attributes="0"/>
-                              <Component id="stepTextField" min="-2" pref="71" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="upperBorderLabel" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="lowerBorderLabel" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="stepLabel" min="-2" pref="98" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="lowerBorderTextField" min="-2" pref="71" max="-2" attributes="0"/>
+                                      <Component id="upperBorderTextField" min="-2" pref="71" max="-2" attributes="0"/>
+                                      <Component id="stepTextField" min="-2" pref="71" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Component id="cleanButton" alignment="0" min="-2" pref="90" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="getResultButton" max="32767" attributes="0"/>
                               <Component id="deleteEntryButton" alignment="0" max="32767" attributes="0"/>
-                              <Component id="addEntryButton" alignment="0" min="-2" pref="90" max="-2" attributes="0"/>
+                              <Component id="addEntryButton" alignment="1" max="32767" attributes="0"/>
+                              <Component id="getResultButton" alignment="1" max="32767" attributes="0"/>
+                              <Component id="fillButton" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jScrollPane2" pref="500" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
@@ -98,7 +104,12 @@
                   </Group>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="jScrollPane2" min="-2" pref="139" max="-2" attributes="0"/>
-                  <EmptySpace pref="35" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="fillButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cleanButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="17" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -115,31 +126,31 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="4" rowCount="0">
-                    <Column editable="true" title="&#x41d;&#x438;&#x436;&#x43d;&#x44f;&#x44f; &#x433;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x430;" type="java.lang.Object"/>
-                    <Column editable="true" title="&#x412;&#x435;&#x440;&#x445;&#x43d;&#x44f;&#x44f; &#x433;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x430;" type="java.lang.Object"/>
-                    <Column editable="true" title="&#x428;&#x430;&#x433;" type="java.lang.Object"/>
-                    <Column editable="true" title="&#x420;&#x435;&#x437;&#x443;&#x43b;&#x44c;&#x442;&#x430;&#x442;" type="java.lang.Object"/>
+                    <Column editable="false" title="&#x41d;&#x438;&#x436;&#x43d;&#x44f;&#x44f; &#x433;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x430;" type="java.lang.Object"/>
+                    <Column editable="false" title="&#x412;&#x435;&#x440;&#x445;&#x43d;&#x44f;&#x44f; &#x433;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x430;" type="java.lang.Object"/>
+                    <Column editable="false" title="&#x428;&#x430;&#x433;" type="java.lang.Object"/>
+                    <Column editable="false" title="&#x420;&#x435;&#x437;&#x443;&#x43b;&#x44c;&#x442;&#x430;&#x442;" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title value="&#x41d;&#x438;&#x436;&#x43d;&#x44f;&#x44f; &#x433;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x430;"/>
+                      <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title value="&#x412;&#x435;&#x440;&#x445;&#x43d;&#x44f;&#x44f; &#x433;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x430;"/>
+                      <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title value="&#x428;&#x430;&#x433;"/>
+                      <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title value="&#x420;&#x435;&#x437;&#x443;&#x43b;&#x44c;&#x442;&#x430;&#x442;"/>
+                      <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
@@ -161,6 +172,7 @@
               <Color blue="97" green="3e" red="a1" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44c;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x414;&#x43e;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44c; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x432; &#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x443;"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addEntryButtonMouseClicked"/>
@@ -172,6 +184,7 @@
               <Color blue="97" green="3e" red="a1" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c; &#x432;&#x44b;&#x431;&#x440;&#x430;&#x43d;&#x43d;&#x443;&#x44e; &#x441;&#x442;&#x440;&#x43e;&#x43a;&#x443;"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="deleteEntryButtonMouseClicked"/>
@@ -183,6 +196,7 @@
               <Color blue="97" green="3e" red="a1" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&#x412;&#x44b;&#x447;&#x438;&#x441;&#x43b;&#x438;&#x442;&#x44c;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x44b;&#x447;&#x438;&#x441;&#x43b;&#x438;&#x442;&#x44c; &#x432;&#x44b;&#x431;&#x440;&#x430;&#x43d;&#x43d;&#x443;&#x44e; &#x441;&#x442;&#x440;&#x43e;&#x43a;&#x443;"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="getResultButtonMouseClicked"/>
@@ -214,6 +228,30 @@
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="&#x428;&#x430;&#x433;"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="cleanButton">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="97" green="3e" red="a1" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x447;&#x438;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41e;&#x447;&#x438;&#x441;&#x442;&#x438;&#x442;&#x44c; &#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x443;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cleanButtonMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="fillButton">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="97" green="3e" red="a1" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x44c;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x44c; &#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x443; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x43c;&#x438;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="fillButtonMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
