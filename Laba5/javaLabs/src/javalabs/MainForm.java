@@ -557,11 +557,12 @@ public class MainForm extends javax.swing.JFrame {
         
         RecIntegral integral = collection.get(index);
         
-        NewThread thread = new NewThread(model, integral, index);
-        thread.start();
-        //double resNum = integral.Result();
-        //Object resObj = resNum;
-        //model.setValueAt(resObj, index, 3);
+        Thread calculating = new Thread(() -> {
+            double resNum = integral.Result();
+            Object resObj = resNum;
+            model.setValueAt(resObj, index, 3);
+        });
+        calculating.start();
     }//GEN-LAST:event_getResultButtonMouseClicked
 
     private void cleanButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cleanButtonMouseClicked
