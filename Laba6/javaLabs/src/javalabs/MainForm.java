@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -31,8 +32,11 @@ import org.json.simple.parser.*;
  * @author Максим
  */
 public class MainForm extends javax.swing.JFrame {
+    static UDPServer server;
+    static MainForm frame;
     
     private ArrayList<RecIntegral> collection = new ArrayList<>();
+    public static ConcurrentHashMap<Integer, ClientHandler> clients = new ConcurrentHashMap<>();
 
     JFileChooser fileChooser = new JFileChooser();
     
@@ -335,10 +339,16 @@ public class MainForm extends javax.swing.JFrame {
         fillButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         loadButton = new javax.swing.JButton();
+        clientLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Вычисление определенного интегралла - 1/x");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(211, 183, 216));
 
@@ -433,6 +443,8 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        clientLabel.setText("Клиентов: 0");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -456,14 +468,16 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(deleteEntryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(addEntryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(getResultButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(cleanButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(45, 45, 45)
                         .addComponent(fillButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                         .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(45, 45, 45)
-                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(clientLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(loadButton, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))))
                 .addGap(30, 30, 30))
         );
         jPanel1Layout.setVerticalGroup(
@@ -493,7 +507,9 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(saveButton)
                         .addComponent(fillButton)
                         .addComponent(loadButton)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clientLabel)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -556,13 +572,22 @@ public class MainForm extends javax.swing.JFrame {
         if (index == -1) return;
         
         RecIntegral integral = collection.get(index);
-        
-        Thread calculating = new Thread(() -> {
-            double resNum = integral.Result();
-            Object resObj = resNum;
-            model.setValueAt(resObj, index, 3);
-        });
-        calculating.start();
+        if (clients.isEmpty()) {
+            Thread calculating = new Thread(() -> {
+                double resNum = integral.Result();
+                Object resObj = resNum;
+                model.setValueAt(resObj, index, 3);
+            });
+            calculating.start();
+        } else {
+            Thread calculating = new Thread(() -> {
+                double resNum = server.Result(integral);
+                Object resObj = resNum;
+                model.setValueAt(resObj, index, 3);
+                integral.SetResult(resNum);
+            });
+            calculating.start();
+        }
     }//GEN-LAST:event_getResultButtonMouseClicked
 
     private void cleanButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cleanButtonMouseClicked
@@ -594,6 +619,12 @@ public class MainForm extends javax.swing.JFrame {
         loadMenu.show(evt.getComponent(), evt.getX(), evt.getY());
     }//GEN-LAST:event_loadButtonMouseClicked
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        for (ClientHandler client : clients.values()) {
+            client.stop();
+        }
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -623,16 +654,37 @@ public class MainForm extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainForm().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new MainForm().setVisible(true);
+//            }
+//        });
+        
+        // Класс сервера
+        server = new UDPServer();
+        // Запуск сервера
+        try {
+            server.Start();
+        } catch (Exception ex) {
+            return;
+        }
+        
+        // Окно      
+        frame = new MainForm();
+        frame.setVisible(true);
+        
+        // Работа сервера
+        try {
+            server.Run();
+        } catch (Exception ex) {
+            server.close();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEntryButton;
     private javax.swing.JButton cleanButton;
+    private javax.swing.JLabel clientLabel;
     private javax.swing.JButton deleteEntryButton;
     private javax.swing.JButton fillButton;
     private javax.swing.JButton getResultButton;
@@ -648,4 +700,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel upperBorderLabel;
     private javax.swing.JTextField upperBorderTextField;
     // End of variables declaration//GEN-END:variables
+
+    void changeCounter() {
+        clientLabel.setText("Клиентов: " + clients.size());
+    }
 }
